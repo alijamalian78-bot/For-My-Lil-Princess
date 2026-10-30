@@ -48,6 +48,189 @@
     @keyframes floatUp { 0%{transform:translateY(0) rotate(0deg);opacity:0} 12%{opacity:.7} 85%{opacity:.5} 100%{transform:translateY(-110vh) rotate(35deg);opacity:0} }
     @keyframes heartbeat { 0%,100%{transform:scale(1)} 12%{transform:scale(1.16)} 22%{transform:scale(1)} 32%{transform:scale(1.1)} 45%{transform:scale(1)} }
     @media(max-width:600px) { .page{padding-top:27px}.lily{width:82px;opacity:.48}.letter-text{font-size:.98rem}.photo-frame{width:min(245px,70vw)} }
+    
+/* Romantic music player */
+.music-player {
+  width: min(100%, 460px);
+  margin: 28px auto;
+  padding: 22px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  border-radius: 25px;
+  border: 1px solid rgba(137, 197, 255, 0.3);
+  background:
+    radial-gradient(circle at 15% 10%, #2878c633, transparent 45%),
+    linear-gradient(135deg, #101e3c, #29152f);
+  box-shadow: 0 15px 45px #0004, 0 0 30px #448dff18;
+  color: #eef6ff;
+}
+
+.music-player::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #f43f6b18;
+  filter: blur(45px);
+  right: -60px;
+  bottom: -70px;
+  pointer-events: none;
+}
+
+.music-title {
+  margin: 0 0 5px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.music-subtitle {
+  margin: 0 0 18px;
+  font-size: 0.82rem;
+  color: #b9d7ff;
+}
+
+.music-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 17px;
+  position: relative;
+}
+
+.music-heart {
+  width: 72px;
+  height: 72px;
+  flex: 0 0 72px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ffb5c866;
+  border-radius: 50%;
+  color: white;
+  background: linear-gradient(145deg, #ff648a, #c51d53);
+  box-shadow: 0 0 22px #ff477455, inset 0 1px 8px #ffffff35;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.music-heart:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 32px #ff477477;
+}
+
+.music-heart:focus-visible {
+  outline: 3px solid #9cd7ff;
+  outline-offset: 4px;
+}
+
+.music-heart svg {
+  width: 31px;
+  height: 31px;
+  fill: currentColor;
+}
+
+.music-heart.is-playing {
+  animation: musicPulse 1.25s ease-in-out infinite;
+}
+
+.music-info {
+  min-width: 0;
+  flex: 1;
+  text-align: right;
+}
+
+.music-track-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.music-status {
+  display: block;
+  margin-top: 5px;
+  color: #a9c9f1;
+  font-size: 0.78rem;
+}
+
+.music-progress {
+  width: 100%;
+  height: 6px;
+  margin: 21px 0 9px;
+  display: block;
+  border-radius: 20px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff20;
+  cursor: pointer;
+  direction: ltr;
+  accent-color: #ff638a;
+}
+
+.music-progress::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ff7297;
+  border: 2px solid white;
+  box-shadow: 0 0 10px #ff638a88;
+}
+
+.music-progress::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff7297;
+  border: 2px solid white;
+}
+
+.music-times {
+  display: flex;
+  justify-content: space-between;
+  direction: ltr;
+  font-size: 0.75rem;
+  color: #a9c9f1;
+  font-variant-numeric: tabular-nums;
+}
+
+.music-note {
+  margin-top: 16px;
+  color: #ffb2c9;
+  font-size: 0.78rem;
+}
+
+@keyframes musicPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px #ff477444;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px #ff477499;
+    transform: scale(1.055);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-heart.is-playing {
+    animation: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .music-player {
+    padding: 19px 15px;
+  }
+
+  .music-heart {
+    width: 62px;
+    height: 62px;
+    flex-basis: 62px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -85,6 +268,57 @@
       <div class="photo-caption">هر جا که باشم، یک جای قلبم برای توست ❤️</div>
     </header>
 
+    
+<section class="music-player" aria-label="پخش آهنگ عاشقانه">
+  <p class="music-title">تقدیم به ماه زندگیم💙</p>
+  <p class="music-subtitle">یک آهنگ، هزار تا حس قشنگ ❤️</p>
+
+  <div class="music-main">
+    <button
+      class="music-heart"
+      id="musicToggle"
+      type="button"
+      aria-label="پخش آهنگ"
+      aria-pressed="false"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s-9-5.7-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.3-9 12-9 12z"/>
+      </svg>
+    </button>
+
+    <div class="music-info">
+      <span class="music-track-name">Mahe Man ♡</span>
+      <span class="music-status" id="musicStatus" aria-live="polite">
+        برای شنیدن آهنگ روی قلب بزن
+      </span>
+    </div>
+  </div>
+
+  <audio id="loveSong" preload="metadata">
+    <source src="romantic-song.mp3" type="audio/mpeg">
+    مرورگر شما از پخش موسیقی پشتیبانی نمی‌کند.
+  </audio>
+
+  <input
+    class="music-progress"
+    id="musicProgress"
+    type="range"
+    min="0"
+    max="100"
+    value="0"
+    step="0.1"
+    aria-label="موقعیت آهنگ"
+  >
+
+  <div class="music-times">
+    <span id="musicCurrent">0:00</span>
+    <span id="musicDuration">0:00</span>
+  </div>
+
+  <div class="music-note">برای ماه خوشگله نانازی م♥</div>
+</section>
+
+
     <div class="divider">♥　❀　♥</div>
     <article class="letter">
       <h2 class="letter-head">✉ نامه ای برای دختر خوشگله زندگیم ✉</h2>
@@ -100,6 +334,10 @@
 
 تو همون کسی هستی که گاهی فقط با دیدن اسمش روی صفحه‌ی گوشیم، ناخودآگاه لبخند می‌زنم. همون کسی که یه پیام کوچیکش می‌تونه حالم رو عوض کنه و یه لحظه حرف زدن باهاش می‌تونه قشنگ‌ترین قسمت روزم بشه. تو همون ماه منی که حتی وقتی روزم تاریکه، فکر کردن بهش یه گوشه از دلم رو روشن می‌کنه.
 
+هما جونم، من تو رو برای تکرار شدن می‌خوام. هیچ وقت برام تکراری نمی‌شی، با خودت فکر کن هر دفعه میبینمت ذوق میکنم، قلبم میخنده، با هر عکس یا ویدیوی که برام میفرستی هزاران بار روت کراش می‌زنم و دوباره دوباره عاشقت می‌شم، غیر از تو یا حتی بهتر از تو رو نمیخوام. تو برام تک هستی. 
+
+قشنگ ترین حس های زندگیم رو با تو ترجمه کردم. بغل کردن گرم و مهربونت امن ترین مکان زندگیمه. بوس کردنت خوشمزه ترین بوس دنیاست. بو کردن موهات و گردنت دقیقا مثل رفتن توی فضای هستش که از زمین رها می‌شم و وارد دنیایی می‌شم که با تو ساختم.
+
 دختر نازم، شاید بعضی وقت‌ها نتونم اون‌جوری که توی قلبم احساس می‌کنم، بهت نشون بدم چقدر دوستت دارم؛ شاید گاهی کلمه‌هام کافی نباشن، شاید گاهی نتونم دقیقاً همون چیزی رو بگم که دلم می‌خواد. اما می‌خوام بدونی که پشت تمام این کلمه‌های ساده، یه عالمه احساس قشنگ برای تو پنهون شده.
 
 من عاشق ناز کردنت، خندیدنت، حرف زدنت، شیطنت‌هات و حتی اون لحظه‌هایی‌ام که خودت فکر می‌کنی معمولی هستی، اما از نظر من قشنگ‌ترین دختر دنیایی.
@@ -112,7 +350,7 @@
 
 من نمی‌خوام فقط کسی باشم که بهت می‌گه دوستت دارم؛ می‌خوام کسی باشم که رفتارش هم این دوست داشتن رو بهت نشون می‌ده. کسی که به حرف‌هات گوش می‌ده، به احساساتت اهمیت می‌ده و خوشحالیت براش مهمه.
 
-دلیل خوشحالی و لبخندم،** تو نمی‌دونی چقدر قشنگه که توی این دنیای بزرگ، آدمی وجود داره که می‌تونه با یه کلمه، یه نگاه یا حتی یه پیام ساده، این‌همه احساس خوب رو توی قلبم زنده کنه. برای من، تو فقط یه اسم توی مخاطبین گوشیم نیستی؛ تو یه عالمه خاطره، یه عالمه لبخند، یه عالمه دلتنگی و هزاران حس قشنگی هستی که شاید هیچ‌وقت نتونم همشون رو به زبون بیارم.
+دلیل خوشحالی و لبخندم، تو نمی‌دونی چقدر قشنگه که توی این دنیای بزرگ، آدمی وجود داره که می‌تونه با یه کلمه، یه نگاه یا حتی یه پیام ساده، این‌همه احساس خوب رو توی قلبم زنده کنه. برای من، تو فقط یه اسم توی مخاطبین گوشیم نیستی؛ تو یه عالمه خاطره، یه عالمه لبخند، یه عالمه دلتنگی و هزاران حس قشنگی هستی که شاید هیچ‌وقت نتونم همشون رو به زبون بیارم.
 
 ماه من، اگه یه روز ازم بپرسی چقدر دوستت دارم، شاید نتونم عددی بهت بگم. چون چطور می‌شه برای احساسی که هر روز شکل تازه‌ای پیدا می‌کنه، یه اندازه‌ی مشخص تعیین کرد؟ فقط می‌تونم بگم که دوست داشتنت برای من چیزی بیشتر از یه احساس لحظه‌ایه؛ احساسی که دلم می‌خواد با مراقبت، صداقت، احترام و تلاش، هر روز قشنگ‌ترش کنم.
 
@@ -157,6 +395,84 @@
       heart.style.animationDelay = (-Math.random() * 24) + 's';
       document.body.appendChild(heart);
     }
+
+    
+const loveSong = document.getElementById("loveSong");
+const musicToggle = document.getElementById("musicToggle");
+const musicStatus = document.getElementById("musicStatus");
+const musicProgress = document.getElementById("musicProgress");
+const musicCurrent = document.getElementById("musicCurrent");
+const musicDuration = document.getElementById("musicDuration");
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+
+  return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+}
+
+function updateMusicState(isPlaying) {
+  musicToggle.classList.toggle("is-playing", isPlaying);
+  musicToggle.setAttribute("aria-pressed", String(isPlaying));
+  musicToggle.setAttribute(
+    "aria-label",
+    isPlaying ? "توقف آهنگ" : "پخش آهنگ"
+  );
+
+  musicStatus.textContent = isPlaying
+    ? "در حال پخش، تقدیم به تو ♡"
+    : "برای شنیدن آهنگ روی قلب بزن";
+}
+
+musicToggle.addEventListener("click", async () => {
+  if (loveSong.paused) {
+    try {
+      await loveSong.play();
+    } catch (error) {
+      musicStatus.textContent =
+        "پخش نشد؛ وجود فایل MP3 و نام آن را بررسی کن.";
+    }
+  } else {
+    loveSong.pause();
+  }
+});
+
+loveSong.addEventListener("play", () => updateMusicState(true));
+loveSong.addEventListener("pause", () => updateMusicState(false));
+
+loveSong.addEventListener("loadedmetadata", () => {
+  musicDuration.textContent = formatTime(loveSong.duration);
+});
+
+loveSong.addEventListener("timeupdate", () => {
+  musicCurrent.textContent = formatTime(loveSong.currentTime);
+
+  if (Number.isFinite(loveSong.duration) && loveSong.duration > 0) {
+    musicProgress.value =
+      (loveSong.currentTime / loveSong.duration) * 100;
+  }
+});
+
+musicProgress.addEventListener("input", () => {
+  if (Number.isFinite(loveSong.duration) && loveSong.duration > 0) {
+    loveSong.currentTime =
+      (Number(musicProgress.value) / 100) * loveSong.duration;
+  }
+});
+
+loveSong.addEventListener("ended", () => {
+  // اگر بخواهی آهنگ پس از پایان خودکار از ابتدا شروع شود،
+  // ویژگی loop را در تگ audio اضافه کن.
+  updateMusicState(false);
+});
+
+loveSong.addEventListener("error", () => {
+  musicStatus.textContent =
+    "فایل آهنگ پیدا نشد یا فرمت آن قابل پخش نیست.";
+});
+
   </script>
 </body>
 </html>
